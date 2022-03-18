@@ -50,11 +50,13 @@ class EventController extends Controller
         ->with('admin')
         ->get();
         foreach($events as $event){
+            $participant = Participant::where('event_id',$event->id)->count();
             if($event->time <= $now){
                 $event->status = "N";
             }else{
                 $event->status = "Y";
             }
+            $event->participants = $participant;
             $event->save();
         }
         return response()->json([
